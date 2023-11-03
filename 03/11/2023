@@ -1,0 +1,31 @@
+//Learned about generics and predicate functional interface
+public class MyCustomList<T> {
+	
+	ArrayList<T>al = new ArrayList<T>();
+	
+	
+	public void addElements(T element)
+	{
+		al.add(element);
+	}
+	public void removeElement(T element)
+	{
+		al.remove(element);
+	}
+   
+	public String toString()
+	{
+		return al.toString();
+	}
+}
+ublic static  void main(String[] args)
+	{
+	
+		MyCustomList<Integer>al = new MyCustomList<Integer>();
+		al.addElements(1);
+		al.removeElement(0);
+		System.out.println(al);
+		MyCustomList<String>l = new MyCustomList<String>();
+		l.addElements("swapnali");
+	   System.out.println(l);
+	}
