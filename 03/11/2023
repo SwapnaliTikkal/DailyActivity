@@ -29,3 +29,64 @@ ublic static  void main(String[] args)
 		l.addElements("swapnali");
 	   System.out.println(l);
 	}
+//predicate functional interface
+
+public class Example1_Predicate {
+	
+	public static void main(String[] args)
+	{
+		Predicate<Integer>p = I->(I>10);
+		System.out.println(p.test(1));
+		System.out.println(p.test(20));
+		
+		Predicate<String>p2=str->str.endsWith("i");
+		System.out.println(p2.test("swapnali"));
+	
+	//lambda to check whther given collection is Empty
+		Predicate<Collection>pr = c->c.isEmpty();
+		ArrayList l1=  new ArrayList();
+		System.out.println(pr.test(l1));
+		l1.add("swapna");
+		System.out.println(pr.test(l1));
+		
+		
+	}
+
+}
+public class Example2_Predicate {
+	
+	
+	public static void m1(Predicate<Integer>p,int[]x)
+	{
+		for(int x1:x)
+		{
+			if(p.test(x1))
+			{
+				System.out.println(x1);
+			}
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		
+
+		int[]x = {1,2,3,4,0,7,13,45,12,14};
+		Predicate<Integer>p = element->element%2==0;
+		m1(p,x);
+		Predicate<Integer>p2= element->element>10;
+		System.out.println("even or greater than 10");
+		m1(p.or(p2),x);
+	    System.out.println("even and gretaer than 10");
+		m1(p.and(p2),x);
+		System.out.println("negation example");
+		m1(p.negate(),x);
+	}
+
+}
+
+
+
+
+
+
