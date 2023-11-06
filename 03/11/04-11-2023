@@ -1,1 +1,112 @@
+package java8_pract;
+import java.util.*;
+public class Printing {
+	
+	public static void main(String args[])
+	{
+		List<String>al = List.of("swapnali","ram","rakesh","swapnali");
+	    al.stream().forEach(element->System.out.println(element));
+	    List<Integer>a = List.of(1,2,3,4,5);
+	    a.stream().forEach(element->System.out.println(element));
+	    //How will you take out only the unique elements from a list of fruits using Streams API?
+	   al.stream().forEach(element->System.out.println(element.toUpperCase()));
+	   
+	   System.out.println("unique");
+	   al.stream().distinct().forEach(element->System.out.println(element));
+	   System.out.println("using filter");
+	   
+	    //using filter
+	    al.stream().filter(element->element.endsWith("li")).forEach(element->System.out.println(element));
+	   
+	    /*1. write a program to find the count of the characters available in the string as well as remove the duplicate characters to write single string
+	    
+	    eg.
+	    input : caaaappppggeeeemmmiiinnnniii
+	     
+	    output : c =1, a =4 ,p=4,g=2,e=4,m=3, i=6 n=4
+	    capgemini*/
+	    
+//	    al.stream().split(element)
+	   
+	    a.stream().filter(element->element%2==1).forEach(element->System.out.println(element));
+	    a.stream().forEach(element->
+	    {if(element%2==0)
+	    	{
+	    	System.out.println(element);	
+	    	}
+	    	else
+	    	{
+	    		System.out.println(element);
+	    	}
+	    });
+	    //sum of numbers
+	    int sum = a.stream().reduce(0,(element1,element2)->element1+element2);
+	    System.out.println(sum);
+	    
+//	    Integer sum=0;
+//	 a.stream().forEach(element->a.add(element));
+//	 System.out.println(a);
+	    //fibonnaci series
+	   
+	    //sum of odd numbers
+	    int sum2= a.stream().filter(element->element%2==1).reduce(0, (element1,element2)->(element1+element2));
+	    System.out.println(sum2);
+	    
+	    //sum of even numbers
+	    int sum3=a.stream().filter(n->n%2==0).reduce(0,(n1,n2)->(n1+n2));
+	    System.out.println(sum3);
+	    
+	
+	}
+
+}
+package Binum;
+import java.util.*;
+
+public class Al_pract {
+
+	public static void main(String[] args)
+	{
+		//using comparator class
+		MyComparator mc= new MyComparator();
+		ArrayList<Integer>al = new ArrayList<Integer>();
+	al.add(9);
+	al.add(10);
+	al.add(11);
+	System.out.println("Before Sorting:-");
+	for(Integer a:al)
+	{
+		System.out.println(a);
+	}
+	Collections.sort(al,mc);
+	System.out.println("After Sorting:-");
+	for(Integer a:al)
+	{
+		System.out.println(a);
+	}
+	//using lambda expressions
+	Collections.sort(al,(I1,I2)->I1>I2?-1:I1<I2?1:0);
+	System.out.println(al);
+	
+	//new feature of java 9 :- 1)List.of method
+	List<String>al1= List.of("Apple","Banana","Bat");
+	System.out.println(al1);
+	
+	
+	//get element at specific index
+	System.out.println(al1.get(0));
+	
+	//anything created by using of keyword is immutable to make it mutable 
+	//convert list to arratlist, linkedlist,vector
+	
+	List<String>wordslist = new ArrayList<String>(al1);
+	wordslist.add("Cat");
+	System.out.println(wordslist);
+	List<String>wordsLinkedList = new LinkedList<String>(al1);
+	wordsLinkedList.add("horse");
+	System.out.println(wordsLinkedList);
+	List<String>wordsVector = new Vector<String>(al1);
+	System.out.println(wordsVector);
+	}
+}
 
