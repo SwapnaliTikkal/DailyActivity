@@ -1,0 +1,97 @@
+package Predefined_FI;
+import java.util.*;
+import java.util.function.*;
+public class Example3_Predicate {
+
+	public static void main(String[] args)
+	{//example 1 -startswith
+		String[]arr1 = {"rahul","rakesh","ramesh","gurpreet","ganesh"};
+		
+		Predicate<String>p = element->element.charAt(0)=='g';
+		for(String s:arr1)
+		{
+			if(p.test(s))
+			{
+				System.out.println(s);
+			}
+		}
+		
+	Arrays.asList(arr1).stream().filter(element->element.charAt(0)=='r').forEach(element->System.out.println(element));
+	//example2 remove null or empty string
+	String[] arr2= {"",null,"swapnali","ram","aiyat",null};
+	Predicate<String>p2=element->element==""||element==null;
+	for(String s2:arr2)
+	{
+		if(!p2.test(s2))
+		{
+			System.out.println(s2);
+		}
+	}
+	
+	//predicate for user authentication using predicate
+	Predicate<User>p3=user->user.username.equals("Swapnali")&& user.password.equals("Swapnali@123");
+    Scanner sc = new Scanner(System.in);
+   User user2 =new User(sc.next(),sc.next());
+	if(p3.test(user2))
+	{
+		System.out.println("valid user");
+	}
+	else
+		System.out.println("invalid user");
+	
+	
+	
+	// predicate for softare engineer is having gf or not
+	SoftwareEngineer[] se= { new SoftwareEngineer("mahesh",false,20),
+			new  SoftwareEngineer("swapnali",true,22),
+			new SoftwareEngineer("sarthak",false,8),
+			
+			
+			 
+	};
+
+
+//Predicate<SoftwareEngineer>p4=se2-> se2.age>=20 && se2.isHavingGf==true;
+Predicate<SoftwareEngineer>p4= employee->employee.age>=20 && employee.isHavingGf;
+	
+for(SoftwareEngineer s:se)
+{
+	if(p4.test(s))
+	{
+	System.out.println(s);	
+	}
+}
+	}}
+
+package Predefined_FI;
+
+public class SoftwareEngineer {
+	public String name;
+	public boolean isHavingGf;
+	public int age;
+	
+	public SoftwareEngineer(String name, boolean isHavingGf, int age)
+	{
+		this.age=age;
+		this.isHavingGf=isHavingGf;
+		this.name=name;
+	}
+
+	public String toString()
+	{
+		return this.age+" "+this.name+" "+this.isHavingGf;
+	}
+}
+package Predefined_FI;
+
+public class User {
+	public String username;
+	public String password;
+	
+	public User(String username, String password)
+	{
+		this.password=password;
+		this.username=username;
+	}
+
+}
