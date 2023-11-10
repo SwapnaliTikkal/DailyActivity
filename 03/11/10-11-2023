@@ -1,0 +1,317 @@
+
+//quiz.ts
+import { Component } from '@angular/core';
+import { ScoreService } from '../score.service';
+import { SharedDataService } from '../shared-data.service';
+import { Router } from '@angular/router';
+@Component({
+  selector: 'app-quiz',
+  templateUrl: './quiz.component.html',
+  styleUrls: ['./quiz.component.css']
+})
+export class QuizComponent {
+  selectedBook: any;
+  showDetailsCard = false;
+  currentQuestionIndex: number = 0;
+  showNextQuestion: boolean = false;
+  selectedBooks: any[] = [];
+  constructor(private router: Router,private scoreService: ScoreService, private sharedDataService: SharedDataService) {}
+
+  // Your quiz questions and other data
+   quizQuestions: any[] = [
+    {
+      text: 'Who actually was the half-blood prince?',
+      correctOption: 'B',
+      selectedOption: '',
+      optionA: 'A. Albus Dumbledore',
+      optionB: 'B. Severus Snape',
+      optionC: 'C. Bellatrix Lestrange',
+      optionD: 'D. Tom Riddle',
+    },
+    {
+             text: 'What is Horace Slughorns specialty as a professor at Hogwarts? ',
+             correctOption:'A',
+             selectedOption:'',
+             optionA:'A. Potions Master',
+             optionB:'B. Scientist',
+             optionC:'C. Doctor',
+             optionD:'D. Magician',
+          },
+          {
+             text: 'What is the name of the potion that Professor Slughorn brews for Harry?',
+             correctOption: 'C',
+             selectedOption:'',
+             optionA:'A. Gauarin',
+             optionB: 'B. Sermontia',
+             optionC:'C. Amortentia',
+             optionD:'D. Loverin' ,
+          },
+          {
+             text:'Who ultimately kills Professor Dumbledore at the Astronomy Tower?',
+             correctOption:'B',
+             selectedOption:'',
+             optionA:'A. Harry',
+             optionB:'B. Severus Snape',
+             optionC:'C. Crocodile',
+             optionD:'D. Lion',
+          },
+          {
+            text:'Who acquires a dangerous necklace and later inadvertently poisons Ron Weasley?',
+            correctOption:'D',
+            selectedOption:'',
+            optionA:'A. harry Potter ',
+            optionB:'B. Emma Watson',
+            optionC:'C. Robert Gill',
+            optionD:'D. Katie Bell  ',
+          },
+    
+  ];
+
+  quizQuestions1: any[] = [
+    {
+      text: 'Who are the main characters in "Love Story" by Karen Kingsbury?',
+      correctOption:'D',
+      selectedOption:'',
+      optionA:'A. Jackson',
+      optionB:'B. Emma Watson',
+      optionC:'C. Robert Gill',
+      optionD:'D. John Baxter and Elizabeth Baxter  ',
+    },
+    {
+      text: 'In which book series does "Love Story" belong?',
+      correctOption:'A',
+      selectedOption:'',
+      optionA:'A. Baxter Family series',
+      optionB:'B. Emma Rodges series',
+      optionC:'C. Robert Gill',
+      optionD:'D. John Baxter and Elizabeth Baxter  ',
+    },
+    {
+      text: 'What is the genre of "Love Story" by Karen Kingsbury?',
+      correctOption:'B',
+      selectedOption:'',
+      optionA:'A. Horror',
+      optionB:'B.  Christian fiction',
+      optionC:'C. Comedy',
+      optionD:'D. John Baxter and Elizabeth Baxter  ',
+    },
+    {
+      text: 'In which book series does "Love Story" belong?',
+      correctOption:'A',
+      selectedOption:'',
+      optionA:'A. Baxter Family series',
+      optionB:'B. Emma Rodges series',
+      optionC:'C. Robert Gill',
+      optionD:'D. John Baxter and Elizabeth Baxter  ',
+    },
+    {
+      text: ' What is the relationship between John Baxter and Elizabeth Baxter in "Love Story"?',
+      correctOption:'A',
+      selectedOption:'',
+      optionA:'A. Father and daughter.',
+      optionB:'B. Emma Rodges series',
+      optionC:'C. Robert Gill',
+      optionD:'D. John Baxter and Elizabeth Baxter  ',
+    },
+    
+    
+    
+  ];
+
+  
+
+  ngOnInit() {
+    // Subscribe to changes in the selected book
+    this.sharedDataService.selectedBook$.subscribe((book) => {
+      this.selectedBook = book;
+    });
+  }
+
+  onImageClick(row: any) {
+    this.selectedBooks.push(row);
+    this.showDetailsCard = true;
+    this.selectedBook = row; // Update selectedBook with the details of the selected book
+    this.selectedBook.score = 0;
+    this.sharedDataService.setSelectedBook(this.selectedBook);
+  }
+
+  closeDetailsCard() {
+    this.showDetailsCard = false;
+    this.selectedBook = {}; // Update selectedBook to an empty object
+  }
+
+  nextQuestion() {
+    if (this.currentQuestionIndex < this.quizQuestions.length - 1) {
+      this.currentQuestionIndex++;
+      this.showNextQuestion = false;
+    }
+    else {
+      // Last question, navigate to the dashboard
+      this.router.navigate(['/layout/dashboard']);
+    }
+  }
+
+  selectOption(question: any, option: string) {
+    if (question.selectedOption === '') {
+      question.selectedOption = option;
+
+      if (question.selectedOption === question.correctOption) {
+        this.selectedBook.score += 10;
+        this.scoreService.setScore(this.selectedBook.bookName, this.selectedBook.score);
+        console.log(`Updated score for ${this.selectedBook.bookName} to ${this.selectedBook.score}`);
+      }
+
+      this.showNextQuestion = true;
+    }
+    
+  }
+}
+quiz.html
+ <mat-card *ngIf="selectedBook">
+      
+      <mat-card-header>
+        <mat-card-title style="text-align: center; color: black;">Select From your Active Subscription</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table>
+          <tr style="background: #021c35; color: aliceblue;">
+            <th>e-Book Id</th>
+            <th>e-Book Name</th>
+            <th>Subscription Date</th>
+            <th>Subscription Id</th>
+            <th></th>
+          </tr>
+         
+
+          <tr [ngClass]="selectedBook.id % 2 === 0 ? 'even-row' : 'odd-row'">
+            <td>{{ selectedBook.bookId }}</td>
+            <td>{{ selectedBook.bookName }}</td>
+            <td>{{ selectedBook.subscriptionDate }}</td>
+            <td>{{ selectedBook.subscriptionId }}</td>
+            <td><img src="assets/image3.png" width="25px" height="30px" (click)="onImageClick(selectedBook)"></td>
+          </tr>
+        
+        </table>
+      </mat-card-content>
+    </mat-card>
+    
+    <div *ngIf="showDetailsCard" class="details-card" style="padding-top: 7px;">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title style="text-align: center; color: black;">{{ selectedBook.bookName }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="background-color: #001a33;">
+          <div *ngIf="selectedBook.bookName === 'Harry Potter & the half blood prince'">
+            <div *ngFor="let question of quizQuestions; let i = index">
+              <!-- Only display the current question -->
+              <div [hidden]="currentQuestionIndex !== i">
+                <p style="font-size: 15px;">{{ question.text }}</p>
+                <div class="d-flex flex-row p-4 bg-secondary text-white">
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'A',
+                      'btn-danger': question.selectedOption !== 'A' && question.correctOption !== 'A'
+                    }"
+                    (click)="selectOption(question, 'A')"
+                  >
+                    {{ question.optionA }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'B',
+                      'btn-danger': question.selectedOption !== 'B' && question.correctOption !== 'B'
+                    }"
+                    (click)="selectOption(question, 'B')"
+                  >
+                    {{ question.optionB }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'C',
+                      'btn-danger': question.selectedOption !== 'C' && question.correctOption !== 'C'
+                    }"
+                    (click)="selectOption(question, 'C')"
+                  >
+                    {{ question.optionC }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'D',
+                      'btn-danger': question.selectedOption !== 'D' && question.correctOption !== 'D'
+                    }"
+                    (click)="selectOption(question, 'D')"
+                  >
+                    {{ question.optionD }}
+                  </button>
+                  <br>
+                  <button class="btn btn-primary" (click)="nextQuestion()">Next</button>
+                </div>
+              </div>
+            </div>
+            <p>Score: {{ selectedBook.score }}</p>
+          </div>
+    
+          <!-- Add a similar block for 'Love Story' questions -->
+          <div *ngIf="selectedBook.bookName === 'Love Story'">
+            <div *ngFor="let question of quizQuestions1; let i = index">
+              <!-- Only display the current question -->
+              <div [hidden]="currentQuestionIndex !== i">
+                <p style="font-size: 15px;">{{ question.text }}</p>
+                <div class="d-flex flex-row p-4 bg-secondary text-white">
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'A',
+                      'btn-danger': question.selectedOption !== 'A' && question.correctOption !== 'A'
+                    }"
+                    (click)="selectOption(question, 'A')"
+                  >
+                    {{ question.optionA }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'B',
+                      'btn-danger': question.selectedOption !== 'B' && question.correctOption !== 'B'
+                    }"
+                    (click)="selectOption(question, 'B')"
+                  >
+                    {{ question.optionB }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'C',
+                      'btn-danger': question.selectedOption !== 'C' && question.correctOption !== 'C'
+                    }"
+                    (click)="selectOption(question, 'C')"
+                  >
+                    {{ question.optionC }}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    [ngClass]="{
+                      'btn-success': question.selectedOption === 'D',
+                      'btn-danger': question.selectedOption !== 'D' && question.correctOption !== 'D'
+                    }"
+                    (click)="selectOption(question, 'D')"
+                  >
+                    {{ question.optionD }}
+                  </button>
+                  <br>
+                  <button class="btn btn-primary" (click)="nextQuestion()">Next</button>
+                </div>
+              </div>
+            </div>
+            <p>Score: {{ selectedBook.score }}</p>
+          </div>
+    
+          <button (click)="closeDetailsCard()">Close</button>
+        </mat-card-content>
+      </mat-card>
+  
+    
