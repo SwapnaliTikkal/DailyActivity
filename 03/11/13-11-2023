@@ -1,0 +1,129 @@
+package java8_pract;
+import java.util.*;
+import java.util.function.*;
+public class Test {
+	public static void main(String[] args)
+	{   
+		// write function to find the grade of students
+		Scanner sc= new Scanner(System.in);
+		ArrayList<Student> al = new ArrayList<Student>();
+		System.out.println("Enter the number of students");
+		int n =sc.nextInt();
+		System.out.println("Enter student details:-");
+		for(int i=0;i<n;i++)
+		{
+		al.add(new Student(sc.next(),sc.nextInt(3)));
+		}
+		Function<Student,String>f= a->
+		{
+			if(a.marks>=80)
+				return "A";
+			else if(a.marks>=65&& a.marks<80)
+				return "B";
+			else if(a.marks>=50 && a.marks<65)
+				return "C";
+			else if(a.marks>=35 && a.marks<50)
+				return "D";
+			else
+				return "Fail";
+		};
+		
+		for(Student s:al)
+		{
+			System.out.println(s.name);
+			
+			System.out.println(s.marks);
+			System.out.println(f.apply(s));
+			System.out.println();
+		}
+		
+		//write a predicate to calculate marks greater than 60
+		Predicate<Student>p2= a->a.marks>60;
+		
+		
+		for(Student s2:al)
+		{ 
+			if(p2.test(s2)) {
+			System.out.println(s2.name);
+			System.out.println(s2.marks);
+			System.out.println();
+		}
+	}
+		
+		//write a function to find total salary of all employess present
+		ArrayList<Employee>e= new ArrayList<Employee>();
+		System.out.println("Enter the number of employees");
+		int number = sc.nextInt();
+		System.out.println("Enter the employee details");
+		for(int i=0;i<number;i++)
+		{
+		    e.add(new Employee(sc.next(),sc.nextDouble()));	
+		}
+		System.out.println(e);
+		Function<ArrayList<Employee>,Double>f2=a->{
+			double sum = 0;
+			for(Employee e2:a)
+			{
+			sum = sum+e2.salary;	
+			}
+			return sum;
+		};
+		System.out.println(f2.apply(e)); 
+		
+		// increementing the employee salary by 477 whose salary is less than 3500 else print the salary
+
+		Function<Employee,Employee > f3 = a -> {
+			a.salary=a.salary+477;
+			return a;
+		};
+		Predicate<Employee>p=e3->
+			e3.salary<3500;
+			
+//			ArrayList<Employee>e2=new ArrayList<Employee>();
+		for(Employee emp:e)
+		{
+			if(p.test(emp))
+			{
+				f3.apply(emp);
+				//e2.add(emp);
+			}
+			System.out.println("EMPLOYEE NAME:"+emp.name+"EMPLOYEE SALARY:"+emp.salary);
+			
+		}
+		
+	}
+}
+
+
+
+package java8_pract;
+
+public class Employee {
+
+	public String name;
+	public double salary;
+	public Employee(String name,double salary)
+	{
+		this.name=name;
+		this.salary=salary;
+	}
+	public String toString()
+	{
+		return this.name+" "+this.salary;
+	}
+}
+
+package java8_pract;
+
+public class Student {
+	public String name;
+	public int marks;
+	
+  public Student(String name, int marks)
+  {
+	  this.marks=marks;
+	  this.name= name;
+  }
+
+}
+
