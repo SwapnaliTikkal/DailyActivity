@@ -1,0 +1,219 @@
+difference between      predicate                  function                      Consumer
+
+
+1)to implement conditional checks         to perform certain operations          to accept / consume the 
+we should go for predicate as return    and to return some results                value and perform required
+type is always boolean                  we should go for function                  operations
+
+2)Predicate defines only one abstract      function defines abstract method        consumer defines abstract method
+method test()                             apply()                                   accept()
+default methods:-                         default methods:-                         default methods:-  
+1)negate                                 1)andThen
+2)or                                     2)compose
+3)and 
+static method:- isEqual()               static method:-identity
+
+
+
+3)Predicate can take only one type        function can take 2 type parameter       consumer take only one type parameter
+parameter which represents input        first represents input argument and          which represents input argument
+argument  type                          second represents return type
+
+
+4)public boolean test(T t)              public R apply(T t)                         void accept(T t)
+
+5)return type is always boolean            return type can be any                 no return type
+
+
+6)interface Predicate<T>                interface Function<T,R>                 interface Consumer<T>
+{                                    {                                          {
+boolean test(T t)                      R apply(T t);                               void accept(T t);
+}                                    }                                            }
+
+
+T-input paramenter
+R- return type
+
+Function Chaining
+
+**default methods in function**
+if f1 and f2 are 2 functions
+1)andThen- f1.andThen(f2)-first f1 to be applied followed by f2
+2)compose-f1.compose(f2)- firt f2 to be apploed followed by f1
+
+abstract method- apply
+default methods:-
+andThen
+compose
+static method:- identity -very rare use
+to return same value
+
+//code
+
+package java8_pract;
+import java.util.function.*;
+import java.util.*;
+public class Consumer_Example1 {
+	public static void main(String[] args)
+	{
+		Consumer<String>c= s->System.out.println(s);
+		c.accept("hello");
+		c.accept("Durgasoft");
+		
+		//display movie details using consumer
+		//for only one movie
+	Movie mov = new Movie("haunted","rahul","raghini");
+		Consumer<Movie>m = s->System.out.println("hero of movie is"+s.hero+" "+"heroine is "+s.heroine+"Movie name is "+s.name );
+	   m.accept(mov);
+	   
+	   ArrayList<Movie>al = new ArrayList<Movie>();
+	   al.add(new Movie("Raghini MMS","rahul","raghini"));
+	   al.add(new Movie("Hate story 3","ramesh","sunny"));
+	   al.add(new Movie("Mastijade","ramesh","sunny"));
+	   
+	   for(Movie m2:al)
+	   {
+		  m.accept(m2);
+	   }
+	   
+	}
+
+}
+
+
+
+package java8_pract;
+
+public class Movie {
+	
+	String name;
+	String hero;
+	String heroine;
+	
+	public Movie(String name, String hero, String heroine)
+	{
+		this.hero=hero;
+		this.heroine= heroine;
+		this.name=name;
+	}
+
+}
+
+package java8_pract;
+import java.util.function.*;
+import java.util.*;
+public class Combining_all {
+	
+	public static void main(String[] args)
+	{
+Scanner sc = new Scanner(System.in);		
+//ArrayList<Student>al2 = new ArrayList<Student>();
+ArrayList<Student> al = new ArrayList<Student>();
+System.out.println("Enter the number of students");
+int n =sc.nextInt();
+System.out.println("Enter student details:-");
+for(int i=0;i<n;i++)
+{
+al.add(new Student(sc.next(),sc.nextInt()));
+}
+	Predicate<Student>p =  s->s.marks>60;
+	Function<Student,String>fn = s->
+	{
+		if(s.marks>=80)
+			return "A";
+		else if(s.marks>=65 && s.marks<80)
+		{
+			return "B";
+		}
+		else if(s.marks>=50 && s.marks<65)
+		{
+			return "C";
+		}
+		else if(s.marks>=35 && s.marks<50)
+		{
+			return "D";
+		}
+		else
+		{
+			return "Fail";
+	}
+};
+Consumer<Student>c = s->{
+	if(p.test(s))
+	{
+	System.out.println("Student name: "+s.name);
+	System.out.println("Student marks: "+s.marks);
+	System.out.println("Student grade: "+fn.apply(s));
+	System.out.println();
+	}
+};
+	for(Student st:al)
+	{
+		c.accept(st);
+	}
+	
+	}
+}
+
+
+
+
+package java8_pract;
+import java.util.function.*;
+import java.util.*;
+public class Function_chaining {
+
+	public static void main(String[] args)
+	{
+		
+	Function<String,String>f1= s->s.toUpperCase();
+	Function<String,String>f2= s->s.substring(0,9);
+	System.out.println(f1.apply("swapnalitikkal"));
+	System.out.println(f2.apply("swapnalitikkal"));
+	System.out.println(f1.compose(f2).apply("swapnalitikkal"));
+	System.out.println(f1.andThen(f2).apply("swapnalitikkal"));
+		
+		//understanding difference between compose and   andThen
+	Function<Integer,Integer>f3=i->i*i*i;
+	Function<Integer,Integer>f4=i->i+i+i;
+	System.out.println(f3.apply(8));
+	System.out.println(f4.apply(8));
+	System.out.println(f3.compose(f4).apply(8));   //24+13824
+	System.out.println(f3.andThen(f4).apply(8));   //512+1536
+	
+	//user authentication
+	Scanner sc = new Scanner(System.in);
+	System.out.println("Enter username");
+	String username=sc.next();
+	System.out.println("Enter password");
+	String pwd = sc.next();
+	
+	Function<String,String>f5=s->s.toLowerCase();
+    Function<String,String>f6=s->s.substring(0,5);
+    		
+	
+	if(f5.andThen(f6).apply(username).equals("durga") && pwd.equals("java"))
+	{
+		System.out.println("VALID USER");
+	}
+	else
+	{
+		System.out.println("INVALID USER");	
+	}
+	
+	
+	
+	
+	
+	}
+	
+	
+	
+	
+	
+	
+}
+
+
+
+
