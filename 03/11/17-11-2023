@@ -1,0 +1,83 @@
+package Predefined_FI;
+import java.util.Date;
+import java.util.function.*;
+public class Example1_Consumer {
+
+	public static void main (String[] args)
+	{
+		//write a supplier to get date
+		Supplier<Date>s = ()->new Date();
+		System.out.println(s.get());
+		
+		//write a supplier to get random string
+		Supplier<String>s2 = ()->{
+			String[] str= {"Bunny","sunny","raju","Kaju"};
+			int x=(int)(Math.random()*3);
+			return str[x];
+		};
+		System.out.println(s2.get());
+		
+		//write a supplier to generate random otp
+		
+		//logic 1
+		Supplier<Integer>s3=()->{
+			int x =(int)(Math.random()*999999);
+			return x;
+		
+		};
+		System.out.println(s3.get());
+		
+		//logic 2
+		Supplier<String>s4=()->{
+			String otp="";
+			for(int i=1;i<=6;i++)
+			{
+				otp= otp+(int)(Math.random()*10);
+				
+			}
+			return otp;
+		};
+		System.out.println(s4.get());
+	//program to get random password using supplier	
+		//length=8 chars  2468=digits 1357= upper with @+#$
+		//NOT THAT Satisfied with this logic
+		Supplier<String>password=()->{
+			
+			String str = "1S2W4U7";
+			if(str.length()!=8)
+		return "Invalid password";
+			else
+			{
+				char[]ch=str.toCharArray();
+				for(int i=0;i<ch.length;i++)
+				{
+					
+					if((i%2==0 &&(Character.isDigit(ch[i]))) || (i%2!=0 && Character.isUpperCase(ch[i])||(ch[i]=='$'||ch[i]=='+')))
+					{
+						return "valid password";
+					}
+					
+				}
+			}
+			
+			return "Invalid password";
+		};
+		
+		System.out.println(password.get());
+		
+		//correct logic
+		
+		Supplier<Integer>digits= ()->(int)(Math.random()*10);
+		String symbols="ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$";
+		Supplier<Character>characters=()->symbols.charAt((int)(Math.random()*29));
+		String password1="";
+		for(int i=0;i<=8;i++)
+		{
+			if(i%2==0)
+				 password1+=digits.get();
+			else
+				 password1+=characters.get();
+		}
+		System.out.println(password1);
+	}
+}
