@@ -1,0 +1,68 @@
+package streams;
+import java.util.*;
+import java.util.stream.Collectors;
+public class Example2 {
+	
+	public static void main(String[] args)
+	{//length is greater than equal to 9
+	List<String>al = List.of("swapnali","ram","rakesh","mahesh","sonali");
+	List<String> al2=al.stream().filter(element->element.length()>=5).collect(Collectors.toList());
+	System.out.println(al2);
+	
+	//count method in streams
+	List<String>al3= al.stream().map(element->element.toUpperCase()).collect(Collectors.toList());
+	System.out.println(al3);
+	
+	long count= al.stream().map(element->element.toUpperCase()).count();
+	System.out.println(count);
+	
+	//sorted() method-- for default sorting order
+	//sorted(Comparator c)-- customized sorting order
+	List<String>al4= al.stream().sorted().collect(Collectors.toList());
+	System.out.println(al4);
+	
+	List<String>al5 = al.stream().sorted((i1,i2)-> -i1.compareTo(i2)).collect(Collectors.toList());
+	System.out.println(al5);
+		
+	}
+
+}
+package streams;
+import java.util.*;
+import java.util.stream.Collectors;
+public class Example1 {
+	public static <T> void main(String[] args)
+	{
+		//filtering even /odd
+	Scanner sc = new Scanner(System.in);
+	 List<Integer> al = List.of(1,2,6,8,9,10);
+	 System.out.println("Even numbers :-");
+	 al.stream().filter(i->i%2==0).forEach(i->System.out.println(i));
+	 System.out.println("Odd numbers :-");
+	 al.stream().filter(i->i%2!=0).forEach(i->System.out.println(i));
+	 System.out.println("using collect and collectors");
+	 List<Integer>l=al.stream().filter(i->i%2==0).collect(Collectors.toList());
+	 System.out.println(l);
+	//suppose you are given array of integer ELEMENTS
+	 int []arr= new int[8];
+	 for(int i=0;i<arr.length;i++)
+	 {
+		 arr[i] = sc.nextInt();
+	 }
+	
+	 List<Integer>li=new ArrayList<>();
+	 for(int i:arr)
+	 {
+		 li.add(i);
+	 }
+    System.out.println("convert");
+	System.out.println(li);
+	
+	
+	//double the value by using map method
+	
+	List<Integer>al3=al.stream().map(i->i*2).collect(Collectors.toList());
+	System.out.println(al3);
+	}
+
+}
