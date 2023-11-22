@@ -1,0 +1,210 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ScoreService {
+  private totalPointsSubject = new BehaviorSubject<number>(0);
+  totalPoints$ = this.totalPointsSubject.asObservable();
+
+  updateBookTotalPoints(bookName: string, points: number): void {
+    // Logic to update total points based on book points
+    const currentTotalPoints = this.totalPointsSubject.value;
+    const updatedTotalPoints = currentTotalPoints + points;
+    this.totalPointsSubject.next(updatedTotalPoints);
+  }
+}
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ScoreService } from '../score.service';
+import { SharedDataService } from '../shared-data.service';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
+})
+export class DashboardComponent implements OnInit {
+  cards = [
+    { title: 'Total Points', content: 'Points scored by subscription', value: 0, route: '/page', clickable: false },
+    { title: 'Book Subscribed', content: 'Number of books read', value: 0, route: '/page', clickable: false },
+    { title: 'Active Subscription', content: 'Number of books currently reading', value: 1, route: '/layout/active-subscription', clickable: true },
+    { title: 'Top Subscribers by Points', content: 'Content of card 4', value: 0, route: '/page', clickable: false },
+    { title: 'Trend Chart', content: 'Content of card 5', value: 0, route: '/page', clickable: false }
+  ];
+  subscribedBooks: any[] = [];
+  totalPoints = 0;
+  subscribedBooksCount = 0;
+
+  constructor(private router: Router, private scoreService: ScoreService, private sharedDataService: SharedDataService) {}
+
+  ngOnInit() {
+    this.subscribeToBookChanges();
+    this.subscribeToTotalPoints();
+   
+  }
+
+  subscribeToBookChanges() {
+    this.sharedDataService.selectedBooks$.subscribe((books) => {
+      this.subscribedBooksCount = books.length;
+      this.updateBookSubscribedCard();
+    });
+  }
+
+  subscribeToTotalPoints() {
+    this.scoreService.totalPoints$.subscribe((points) => {
+      this.totalPoints = points;
+      this.updateTotalPointsCard();
+    });
+  }
+
+  private updateBookSubscribedCard() {
+    const bookSubscribedCard = this.cards.find(card => card.title === 'Book Subscribed');
+    if (bookSubscribedCard) {
+      bookSubscribedCard.value = this.subscribedBooksCount;
+    }
+  }
+
+  private updateTotalPointsCard() {
+    const totalPointsCard = this.cards.find(card => card.title === 'Total Points');
+    if (totalPointsCard) {
+      totalPointsCard.value = this.totalPoints;
+    }
+  }
+
+  navigateToPage(route: string) {
+    this.router.navigate([route]);
+  }
+}
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SharedDataService } from '../shared-data.service';
+import { ActivatedRoute ,Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Add the FormBuilder and Validators
+import { ScoreService } from '../score.service';
+@Component({
+  selector: 'app-subscribe',
+  templateUrl: './subscribe.component.html',
+  styleUrls: ['./subscribe.component.css'],
+})
+// ...
+
+export class SubscribeComponent implements OnInit {
+ 
+  cardData: { title: string, points: number } = { title: '', points: 0 }; 
+  showSecondCard = false;
+  myForm: FormGroup;
+
+  constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder,private sharedDataService: SharedDataService,private scoreService: ScoreService) {
+    this.myForm = this.fb.group({
+      globalId: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      grade: ['', [Validators.required]],
+      joiningDate: ['', [Validators.required]],
+      empId: ['', [Validators.required]],
+      supervisor: ['', [Validators.required]],
+    });
+  }
+
+  selectedBooks: any[] = [];
+
+  
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      const cardTitle = params['id'];
+      this.cardData.title = cardTitle;
+      this.cardData.points = this.extractPoints();  // Extract points for the current book
+    });
+
+    this.sharedDataService.selectedBooks$.subscribe((books) => {
+      this.selectedBooks = books;
+    });
+  }
+  private extractPoints(): number {
+    // Logic to extract points from the HTML based on cardData.title
+    switch (this.cardData.title) {
+      case 'Harry Potter & the half blood prince':
+        return 200;
+      case 'Love Story':
+        return 500;
+      // ... Add cases for other books
+      default:
+        return 0;
+    }
+  }
+
+onSubmit() {
+  if (this.myForm.valid) {
+    
+    let selectedBookDetails: any;
+
+    
+    if (this.cardData.title === 'Harry Potter & the half blood prince') {
+      selectedBookDetails = {
+        id: 1,
+        bookId: 1223,
+        bookName: 'Harry Potter & the half blood prince',
+        subscriptionDate: '12 Oct 2023',
+        subscriptionId: '100042',
+        score: 0,
+      };
+    } else if (this.cardData.title === 'Love Story') {
+      selectedBookDetails = {
+        id: 2,
+        bookId: 1224,
+        bookName: 'Love Story',
+        subscriptionDate: '13 July 2023',
+        subscriptionId: '100043',
+        score: 0,
+      };
+    } else if (this.cardData.title === '') {
+      selectedBookDetails = {};
+    }
+
+    
+    this.sharedDataService.addSelectedBook(selectedBookDetails);
+
+    
+    const subscriptionDetails = {
+      globalId: this.myForm.get('globalId')?.value,
+      name: this.myForm.get('name')?.value,
+      grade: this.myForm.get('grade')?.value,
+      joiningDate: this.myForm.get('joiningDate')?.value,
+      empId: this.myForm.get('empId')?.value,
+      supervisor: this.myForm.get('supervisor')?.value,
+    };
+
+    
+    const selectedBook = {
+      ...selectedBookDetails,
+      subscriptionDetails: subscriptionDetails,
+    };
+
+    
+    // this.scoreService.updateBookTotalPoints(selectedBook.bookName, selectedBook.score);
+   
+    this.scoreService.updateBookTotalPoints(this.cardData.title, this.cardData.points);
+    this.saveAndDownloadFormData(selectedBook);
+
+ 
+    this.myForm.reset();
+
+
+    this.router.navigate(['/layout/quiz']);
+  }
+}
+
+
+    private saveAndDownloadFormData(bookDetails: any) {
+   
+    const fileContent = JSON.stringify(bookDetails);
+    const blob = new Blob([fileContent], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'downloaded_file.json';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+}
