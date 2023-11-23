@@ -1,0 +1,62 @@
+import java.util.Arrays;
+import java.util.List;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void printDetails() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class MethodReferenceExample {
+    public static void main(String[] args) {
+        // Create a list of persons
+        List<Person> persons = Arrays.asList(
+                new Person("Alice", 25),
+                new Person("Bob", 30),
+                new Person("Charlie", 22)
+        );
+
+        // 1. Static Method Reference
+        System.out.println("Static Method Reference:");
+        persons.forEach(PersonPrinter::printStatic);
+
+        // 2. Instance Method Reference on a Particular Instance
+        System.out.println("\nInstance Method Reference on a Particular Instance:");
+        PersonPrinter personPrinter = new PersonPrinter();
+        persons.forEach(personPrinter::printInstance);
+
+        // 3. Instance Method Reference on an Arbitrary Instance
+        System.out.println("\nInstance Method Reference on an Arbitrary Instance:");
+        persons.sort(Person::compareByAge);
+        persons.forEach(PersonPrinter::printStatic);
+
+        // 4. Constructor Reference
+        System.out.println("\nConstructor Reference:");
+        List<Person> newPersons = Arrays.asList("David", "Eva", "Frank")
+                .stream()
+                .map(Person::new)
+                .toList();
+
+        newPersons.forEach(PersonPrinter::printStatic);
+    }
+}
+
+class PersonPrinter {
+    // Static method for static method reference
+    public static void printStatic(Person person) {
+        System.out.println("Static Method Reference: " + person.getName());
+    }
+
+    // Instance method for instance method reference on a particular instance
+    public void printInstance(Person person) {
+        System.out.println("Instance Method Reference on a Particular Instance: " + person.getName());
+    }
+}
