@@ -1,0 +1,126 @@
+public class array_repeat {
+	
+	public static void main(String[] args)
+	{
+	Scanner sc = new Scanner(System.in);
+	int num =sc.nextInt();
+	int[]arr = new int[num];
+	int flag=1;
+	for(int i=0;i<num;i++)
+	{
+		arr[i]=sc.nextInt();
+	}
+	for(int i=0;i<=num;i++)
+	{
+		
+		if(flag==0)
+		{
+			continue;
+		}
+		int count=1;
+		
+		for(int j=i+1;j<num;j++)
+		{
+			if(arr[j]== arr[i])
+			{
+				count++;
+				flag=0;
+			}
+			
+		}
+		
+		System.out.println(arr[i]+""+count);
+	}
+	
+	public static void moveHash(String str,int n)
+	{
+		String s="";
+		String s2="";
+		char[]str2= str.toCharArray();
+		for(int i=0;i<n;i++)
+		{
+			if(str2[i]=='#')
+				s=s+str2[i];
+			else
+				s2=s2+str2[i];
+		}
+		System.out.println(s+s2);
+	}
+	public static void main(String[] args)
+	{
+		moveHash("swa#na#li",9);
+	}
+
+		Scanner sc = new  Scanner(System.in);
+		
+		String str = sc.next();
+		int count=1;
+		char[]str2=str.toCharArray();
+		for(int i=0;i<str.length()-1;i++)
+		{
+		
+		if(str2[i]==str2[i+1])
+		{
+			count++;
+		
+		}
+		else
+		{
+		System.out.print(str2[i]+""+count);
+		count=1;
+		}
+	}
+		System.out.println(str2[str.length()-1]+""+count);
+	}
+		
+IntPredicate p = i->i%2==0;
+		if(p.test(9))
+		{
+			System.out.println(true);
+		}
+		else
+			System.out.println(false);
+		
+		int[]x = {2,7,8,9,4,6};
+		for(int x1 :x)
+		{
+			if(p.test(x1))
+				System.out.println(x1);
+		}
+		LocalTime lt =  LocalTime.now();
+		System.out.println(lt);
+		LocalDate d = LocalDate.now();
+		System.out.println(d);
+		LocalDateTime dt= LocalDateTime.now();
+		System.out.println(dt);
+		int dd = dt.getDayOfMonth();
+		System.out.println(dt.getDayOfMonth());
+		int mm=dt.getMonthValue();
+		System.out.println(dt.getMonthValue());
+		int h=dt.getHour();
+		System.out.println(dt.getHour());
+		int m =dt.getMinute();
+		System.out.println(dt.getMinute());
+		int n = dt.getNano();
+		System.out.println(dt.getNano());
+		int sec = dt.getSecond();
+		System.out.println(dt.getSecond());
+		int yyyy=dt.getYear();
+		System.out.println(dt.getYear());
+		
+	LocalDateTime dateT = LocalDateTime.of(yyyy,mm,dd,h,m,sec,n);
+	System.out.println(dateT);
+	// to getdate and time after or before 6 months
+	System.out.println(dateT.plusMonths(6));
+	System.out.println(dateT.minusMonths(6));
+	
+	LocalDate  birthday = LocalDate.of(2001, 05, 07);
+	LocalDate Today = LocalDate.now();
+	Period p = Period.between(birthday, Today);
+	System.out.println(p.getYears());
+		
+		
+		
+		
+	
+
