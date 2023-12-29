@@ -1,0 +1,91 @@
+function CallBack1(name)
+{
+console.log(`Name is ${name}`);
+}
+function CallBack2(surname)
+{
+    console.log(`Surname is ${surname}`);
+}
+function showDetails()
+{
+    console.log("The details are as below:-");
+    CallBack1("Swapnali");
+    CallBack2("Tikkal");
+}
+showDetails();
+
+//callBack functions as an argument
+
+function function_1()
+{
+console.log("hiiiii i am not well")
+}
+function function_2(x)
+{
+x();
+}
+function_2(function_1);
+
+let CalculateBill = function()
+{
+    console.log(arguments);
+}
+CalculateBill(90);
+CalculateBill(89,67,78,23);
+
+let CalculateBill2=function()
+{
+    for(let i=0;i<arguments.length;i++)
+    {
+
+        console.log(arguments[i]);
+    }
+}
+CalculateBill2(90);
+CalculateBill2(90,78,56,12);
+
+//calculating sum 
+
+let Calculate=function()
+{
+    let sum = 0;
+    for(let i=0;i<arguments.length;i++)
+    {
+        sum = sum+arguments[i];
+    }
+    return sum;
+}
+console.log(Calculate(8,9,67,8));
+
+function callBack()
+{
+    console.log("please register.....to continue");
+}
+let interval   =  setInterval(callBack,2000);
+function stopInterval()
+{
+    clearInterval(interval);
+    console.log("stoooppp");
+}
+setTimeout(stopInterval,10*1000);
+
+
+var girl={
+ name:"swapnali",
+ age:23,
+ rejectedBoy:"No"
+}
+var boy={
+name:"rahul",
+age:29,
+rejectedGirl:"No"
+}
+let isCompatible= function()
+{
+if(girl.rejectedBoy===boy.rejectedGirl)
+{
+return true;
+}
+}
+var Dating = isCompatible.bind(girl,boy);
+console.log(Dating());
