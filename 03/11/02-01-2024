@@ -1,0 +1,97 @@
+var a = 1234;
+var b=a.toFixed(2);
+console.log(b);
+
+var c="####swapna123";
+console.log(c.length);
+console.log(c.charCodeAt(3));
+
+console.log(c.substring(6,9));
+console.log(c.substr(6));
+
+//Write a JavaScript function that receives a string as argument, reverse the given string, without using any pre-defined functions and also returns it.
+var c = "swapnali";
+var b="";
+for(var i=c.length-1;i>=0;i--)
+{
+b +=c[i];
+}
+console.log(b);
+
+/*Write a JavaScript function that receives a string
+as argument and capitalize the first letter of each word of a given string, 
+using split() function and returns the result string.*/
+
+var str= "swapnali is great to talk at";
+words = str.split(" ");
+for(let i=0;i<words.length;i++)
+{
+words[i]=words[i].charAt(0).toUpperCase()+words[i].substring(1);
+}
+console.log(words.join(" "));
+
+/*Write a JavaScipt function that receives a string as argument, counts how many times the character occurred in the given string and returns the count.
+
+Ex:  If input is "Hello How Are You", the character "o" occurred 3 times.
+
+Use indexOf() function.*/
+
+var str = "Hii how are you";
+var count=0;
+var index = str.indexOf('e');
+while(index!=-1)
+{
+    count++;
+    index =  str.indexOf('e',index+1);
+}
+console.log(count);
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Greeting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Greeting</h1>
+    <form id="greetingForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <button type="button" onclick="displayGreeting()">Display Greeting</button>
+    </form>
+
+    <div id="greetingOutput"></div>
+
+    <script>
+        function displayGreeting() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+
+            if (firstName && lastName) {
+                const greeting = `Hello, ${firstName} ${lastName}!`;
+                document.getElementById('greetingOutput').textContent = greeting;
+            } else {
+                alert('Please enter both first name and last name.');
+            }
+        }
+    </script>
+</body>
+</html>
+
+
