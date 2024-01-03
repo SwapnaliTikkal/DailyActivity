@@ -1,0 +1,169 @@
+var user={
+    username:"",
+    password:"",
+    isLoggedIn:false,
+    login:function()
+    {
+    if(this.username=="Swapnali" && this.password=="Swapna#123")
+    {
+      this.isLoggedIn=true;
+      return true;
+    }
+    else
+    {
+        this.isLoggedIn=false;
+        return false;
+    }
+}
+}
+var manager={
+    departmentName:"Development",
+    approvesLeave:function()
+    {
+      return `${this.username } your leave is approved`;
+    },
+    dashboard:function()
+    {
+      return `welcome to dashboard  ${this.username}!!`;
+    }
+}
+manager.__proto__=user;
+manager.username="Swapnali";
+manager.password="Swapna123";
+console.log(manager.login());
+console.log(manager.approvesLeave());
+console.log(manager.dashboard());
+
+
+var person={ name:"swapnali",age:22};
+var customer={address:"Pune sec 16 ", phone:7020718977};
+var  student={ rollNo:49,  Percentage:81 };
+student.__proto__=person
+console.log(student.name);
+console.log(student.Percentage);
+customer.__proto__=person                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+console.log(customer.phone+" "+customer.address);
+
+
+var employee={
+    employeeName:"John rick",
+    employeeId:123,
+    employeeSalary:120000,
+    employeeLocation:"Pune"
+}
+var funct1=function({employeeName:en,employeeId:id,employeeSalary:salary,...others})
+{
+    console.log( en+" "+id+" "+salary);
+    console.log(others);
+
+}
+funct1(employee);
+
+
+
+var student ={
+    studentName:"Swapnali",
+    studentRoll:49,
+    studentMarks:75,
+    studentDiv:"C"}
+
+var{studentName:sn,studentRoll:srno,studentMarks:smarks, ...others}=student;
+console.log(sn);
+console.log(smarks);
+console.log(others);
+console.log(srno);
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #taskList {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task {
+            margin: 10px 0;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Task Management System</h1>
+    
+    <input type="text" id="newTask" placeholder="Enter a new task">
+    <button onclick="addTask()">Add Task</button>
+
+    <ul id="taskList"></ul>
+
+    <script>
+        // Task management functionality
+        let tasks = [];
+
+        function addTask() {
+            const newTaskInput = document.getElementById('newTask');
+            const taskText = newTaskInput.value.trim();
+
+            if (taskText !== '') {
+                tasks.push({ text: taskText, completed: false });
+                displayTasks();
+                newTaskInput.value = '';
+            }
+        }
+
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            displayTasks();
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+
+        function displayTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'task';
+                if (task.completed) {
+                    li.classList.add('completed');
+                }
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.onclick = () => toggleTask(index);
+
+                const span = document.createElement('span');
+                span.textContent = task.text;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = () => removeTask(index);
+
+                li.appendChild(checkbox);
+                li.appendChild(span);
+                li.appendChild(removeButton);
+
+                taskList.appendChild(li);
+            });
+        }
+
+        // Initial display
+        displayTasks();
+    </script>
+
+</body>
+</html>
