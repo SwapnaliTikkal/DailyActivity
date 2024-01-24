@@ -1,1 +1,255 @@
+import java.util.Scanner;
+
+class BankAccount {
+    private String accountNumber;
+    private String accountHolder;
+    protected double balance;
+
+    public BankAccount(String accountNumber, String accountHolder, double initialBalance) {
+        this.accountNumber = accountNumber;
+        this.accountHolder = accountHolder;
+        this.balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposit of $" + amount + " successful. New balance: $" + balance);
+    }
+
+    public void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrawal of $" + amount + " successful. New balance: $" + balance);
+        } else {
+            System.out.println("Insufficient funds. Withdrawal failed.");
+        }
+    }
+
+    public void displayInfo() {
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Account Holder: " + accountHolder);
+        System.out.println("Balance: $" + balance);
+    }
+}
+
+class SavingsAccount extends BankAccount {
+    private double interestRate;
+
+    public SavingsAccount(String accountNumber, String accountHolder, double initialBalance, double interestRate) {
+        super(accountNumber, accountHolder, initialBalance);
+        this.interestRate = interestRate;
+    }
+
+    public void addInterest() {
+        double interest = balance * interestRate / 100;
+        balance += interest;
+        System.out.println("Interest added. New balance: $" + balance);
+    }
+}
+
+public class BankSimulation {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        System.out.print("Enter account holder name: ");
+        String accountHolder = scanner.nextLine();
+        System.out.print("Enter initial balance: ");
+        double initialBalance = scanner.nextDouble();
+
+        BankAccount account = new BankAccount(accountNumber, accountHolder, initialBalance);
+
+        System.out.println("\n--- Bank Account Information ---");
+        account.displayInfo();
+
+        System.out.print("\nEnter deposit amount: ");
+        double depositAmount = scanner.nextDouble();
+        account.deposit(depositAmount);
+
+        System.out.print("\nEnter withdrawal amount: ");
+        double withdrawalAmount = scanner.nextDouble();
+        account.withdraw(withdrawalAmount);
+
+        // Creating a savings account
+        System.out.println("\n--- Savings Account Information ---");
+        System.out.print("Enter interest rate for savings account: ");
+        double interestRate = scanner.nextDouble();
+
+        SavingsAccount savingsAccount = new SavingsAccount(accountNumber, accountHolder, initialBalance, interestRate);
+        savingsAccount.displayInfo();
+
+        System.out.print("\nEnter deposit amount for savings account: ");
+        depositAmount = scanner.nextDouble();
+        savingsAccount.deposit(depositAmount);
+
+        System.out.println("\n--- Adding Interest to Savings Account ---");
+        savingsAccount.addInterest();
+        savingsAccount.displayInfo();
+
+        scanner.close();
+    }
+}
+import java.util.ArrayList;
+import java.util.List;
+
+class Book {
+    private String title;
+    private String author;
+    private boolean available;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.available = true;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void borrow() {
+        if (available) {
+            available = false;
+            System.out.println("Book borrowed successfully: " + title + " by " + author);
+        } else {
+            System.out.println("Book is not available for borrowing.");
+        }
+    }
+
+    public void returnBook() {
+        if (!available) {
+            available = true;
+            System.out.println("Book returned successfully: " + title + " by " + author);
+        } else {
+            System.out.println("This book is already in the library.");
+        }
+    }
+}
+
+class Patron {
+    private String name;
+    private List<Book> borrowedBooks;
+
+    public Patron(String name) {
+        this.name = name;
+        this.borrowedBooks = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void borrowBook(Book book) {
+        if (!borrowedBooks.contains(book) && book.isAvailable()) {
+            borrowedBooks.add(book);
+            book.borrow();
+        } else {
+            System.out.println("Unable to borrow the book: " + book.getTitle() + " by " + book.getAuthor());
+        }
+    }
+
+    public void returnBook(Book book) {
+        if (borrowedBooks.contains(book)) {
+            borrowedBooks.remove(book);
+            book.returnBook();
+        } else {
+            System.out.println("You did not borrow the book: " + book.getTitle() + " by " + book.getAuthor());
+        }
+    }
+}
+
+class Library {
+    private List<Book> books;
+    private List<Patron> patrons;
+
+    public Library() {
+        this.books = new ArrayList<>();
+        this.patrons = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public void addPatron(Patron patron) {
+        patrons.add(patron);
+    }
+
+    public void displayBooks() {
+        System.out.println("\n--- Available Books in the Library ---");
+        for (Book book : books) {
+            if (book.isAvailable()) {
+                System.out.println(book.getTitle() + " by " + book.getAuthor());
+            }
+        }
+    }
+
+    public void displayPatrons() {
+        System.out.println("\n--- Library Patrons ---");
+        for (Patron patron : patrons) {
+            System.out.println("Patron: " + patron.getName());
+            System.out.println("Borrowed Books:");
+            for (Book book : patron.getBorrowedBooks()) {
+                System.out.println("- " + book.getTitle() + " by " + book.getAuthor());
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class LibrarySystem {
+    public static void main(String[] args) {
+        // Creating books
+        Book book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald");
+        Book book2 = new Book("To Kill a Mockingbird", "Harper Lee");
+        Book book3 = new Book("1984", "George Orwell");
+
+        // Creating patrons
+        Patron patron1 = new Patron("Alice");
+        Patron patron2 = new Patron("Bob");
+
+        // Creating a library
+        Library library = new Library();
+
+        // Adding books to the library
+        library.addBook(book1);
+        library.addBook(book2);
+        library.addBook(book3);
+
+        // Adding patrons to the library
+        library.addPatron(patron1);
+        library.addPatron(patron2);
+
+        // Displaying available books
+        library.displayBooks();
+
+        // Patron 1 borrows a book
+        patron1.borrowBook(book1);
+
+        // Displaying available books after borrowing
+        library.displayBooks();
+
+        // Displaying patrons and their borrowed books
+        library.displayPatrons();
+
+        // Patron 1 returns the borrowed book
+        patron1.returnBook(book1);
+
+        // Displaying patrons and their borrowed books after returning
+        library.displayPatrons();
+    }
+}
 
